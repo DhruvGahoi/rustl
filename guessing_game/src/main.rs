@@ -6,6 +6,7 @@ fn main() {
     println!("Guess the number!");
     // Rng --> must be in scope
     // gen_range --> Random number generator
+    // (a..=b) range
     let secret_number = rand::rng().random_range(1..=100);
 
     println!("The secret number is: {secret_number}");
