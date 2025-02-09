@@ -76,7 +76,43 @@ fn main() {
     println!("s1 {s1}");
 
     // Dangle
-    let ref_to_nothing = dangle();
+    // let ref_to_nothing = dangle();
+
+    // ----------------- THE SLICE TYPE ---------------
+
+    let mut s = String::from("Hello World");
+    let word = first_word(&s); // value will be 5
+                               // s.clear(); // empties the string
+                               //
+                               // Here the problem is, String is empty but the value is still 5, which is totally invalid
+    println!("length of {s} is {word}");
+
+    // A string slice is a reference to part of a String
+
+    let strrrr = String::from("hello world");
+    let hello = &strrrr[0..5];
+    let world = &strrrr[6..11];
+
+    println!("{hello} is {world}");
+
+    let my_string = String::from("hello world");
+
+    // `first_word` works on slices of `String`s, whether partial or whole
+    let word = first_word(&my_string[0..6]);
+    let word = first_word(&my_string[..]);
+    // `first_word` also works on references to `String`s, which are equivalent
+    // to whole slices of `String`s
+    let word = first_word(&my_string);
+
+    let my_string_literal = "hello world";
+
+    // `first_word` works on slices of string literals, whether partial or whole
+    let word = first_word(&my_string_literal[0..6]);
+    let word = first_word(&my_string_literal[..]);
+
+    // Because string literals *are* string slices already,
+    // this works too, without the slice syntax!
+    let word = first_word(my_string_literal);
 }
 
 fn gives_ownership() -> String {
@@ -117,16 +153,35 @@ fn calculate_length(s: &mut String) -> usize {
 } // // Here, s goes out of scope. But because it does not have ownership of what
   // it refers to, it is not dropped.
 
-fn dangle() -> &String {
-    // dangle returns a reference to a String
+// fn dangle() -> &String {
+// dangle returns a reference to a String
 
-    let s = String::from("hello"); // s is a new String
+// let s = String::from("hello"); // s is a new String
 
-    &s // we return a reference to the String, s
-} // Here, s goes out of scope, and is dropped. Its memory goes away.
+// &s // we return a reference to the String, s
+// } // Here, s goes out of scope, and is dropped. Its memory goes away.
 
 fn no_dangle() -> String {
     let s = String::from("hello");
 
     s
+}
+
+// ------------- THE SLICE TYPE -------------------
+
+// Write a function that takes a string of words separated by spaces and returns the first word it finds in that string. If the function doesn’t find a space in the string, the whole string must be one word, so the entire string should be returned.
+
+fn first_word(s: &str) -> &str {
+    // convert our String to an array of bytes
+    let bytes = s.as_bytes();
+    // iter is a method that returns each element in a collection
+    // enumerate wraps the result of iter and returns each element as part of a tuple
+    //  index, element
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
 }
