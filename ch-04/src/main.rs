@@ -74,6 +74,9 @@ fn main() {
 
     str1.push_str(" wiuhiuwhi");
     println!("s1 {s1}");
+
+    // Dangle
+    let ref_to_nothing = dangle();
 }
 
 fn gives_ownership() -> String {
@@ -113,3 +116,17 @@ fn calculate_length(s: &mut String) -> usize {
     res
 } // // Here, s goes out of scope. But because it does not have ownership of what
   // it refers to, it is not dropped.
+
+fn dangle() -> &String {
+    // dangle returns a reference to a String
+
+    let s = String::from("hello"); // s is a new String
+
+    &s // we return a reference to the String, s
+} // Here, s goes out of scope, and is dropped. Its memory goes away.
+
+fn no_dangle() -> String {
+    let s = String::from("hello");
+
+    s
+}
